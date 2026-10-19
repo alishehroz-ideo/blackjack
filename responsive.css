@@ -1,0 +1,204 @@
+/* Responsive layout, 2026-10-17.
+ * This file is loaded last. Cards and full-screen artwork retain their ratios.
+ * The playing board uses live, independently sized panels instead of a single
+ * 831 x 1891 picture containing the entire user interface.
+ */
+html { height: 100%; background: #020e25; }
+body {
+  width: 100%; height: 100vh; height: 100dvh; min-height: 0;
+  overflow: hidden; overscroll-behavior: none;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  display: flex; flex-direction: column; align-items: center;
+  background: radial-gradient(ellipse at 50% 0, #103468, #041630 65%, #020b20);
+}
+header, main, body.home-view header, body.home-view main, body.result-view main {
+  max-width: 520px !important;
+}
+body.playing-view::before { display: none; }
+body.playing-view .texture { display: block; opacity: .4; }
+body.playing-view header {
+  position: relative; flex: 0 0 56px; width: 100%; height: 56px;
+  left: auto; top: auto; transform: none; padding: 7px 3%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+body.playing-view header a { visibility: visible; font-size: 33px; }
+body.playing-view header a span { font: 600 22px/1 Georgia, serif; letter-spacing: 4px; }
+body.playing-view header a small { font-size: 7px; margin-top: 5px; letter-spacing: 3px; }
+body.playing-view #sound {
+  position: static; flex: 0 0 42px; width: 42px; height: 42px;
+  font-size: 22px; padding: 0; border: 1px solid #edca74; background: #04132b;
+}
+body.playing-view #sound small { font-size: 7px; margin-top: 0; }
+body.playing-view main {
+  position: relative; flex: 1 1 0; min-height: 0; width: 100%;
+  height: auto; aspect-ratio: auto; padding: 4px 2% 8px !important;
+  display: grid; grid-template-rows: 27px 66px 5px 32px minmax(0, 1fr) 178px 22px;
+  gap: 7px; background: none; container-type: inline-size;
+}
+body.playing-view .topline {
+  position: relative; opacity: 1; pointer-events: auto; margin: 0; padding: 0 2px 5px;
+  border-bottom: 1px solid #c99b4d; min-width: 0;
+}
+body.playing-view .topline h1 { font: 600 23px/1 Georgia, serif; letter-spacing: 1px; }
+body.playing-view .topline .eyebrow { font: 600 11px/1 Georgia, serif; letter-spacing: 1px; }
+body.playing-view .topline > .eyebrow { font-size: 10px; }
+body.playing-view .stats,
+body.playing-view .combo,
+body.playing-view .lane {
+  position: relative; inset: auto; width: auto; height: auto; margin: 0;
+  border: 1px solid #e6bd65 !important; border-radius: 8px;
+  background: linear-gradient(125deg, #09264b, #031329 70%) !important;
+  box-shadow: inset 0 0 0 2px #03112a, inset 0 0 0 3px #b68b42, 0 2px 6px #0006 !important;
+}
+body.playing-view .stats::before,
+body.playing-view .combo::before,
+body.playing-view .lane::before,
+body.playing-view .stats::after,
+body.playing-view .combo::after,
+body.playing-view .lane::after {
+  content: '❧'; display: block; position: absolute; color: #e9c477;
+  font: 14px/1 Georgia, serif; opacity: .9; pointer-events: none; z-index: 1;
+}
+body.playing-view .stats::before,
+body.playing-view .combo::before,
+body.playing-view .lane::before { top: 3px; left: 4px; }
+body.playing-view .stats::after,
+body.playing-view .combo::after,
+body.playing-view .lane::after { bottom: 3px; right: 4px; transform: rotate(180deg); }
+body.playing-view .stats { padding: 8px 0 6px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+body.playing-view .stats > div { position: relative; min-width: 0; border-right: 1px solid #b68b42; }
+body.playing-view .stats > div:last-child { border-right: 0; }
+body.playing-view .stats small { opacity: 1; font-size: 9px; line-height: 12px; letter-spacing: 1.5px; }
+body.playing-view .stats strong,
+body.playing-view .stats .lives {
+  position: static; display: block; width: auto; height: auto; background: none;
+  margin: 4px 0 0; font-size: clamp(24px, 8cqw, 34px); line-height: 1; letter-spacing: 0;
+}
+body.playing-view .stats .lives { font-size: clamp(22px, 7cqw, 30px); }
+body.playing-view .timer { position: relative; inset: auto; width: 100%; height: 5px; margin: 0; }
+body.playing-view .combo { padding: 4px 12px; }
+body.playing-view .combo small { font-size: clamp(12px, 3.4cqw, 15px); }
+body.playing-view .combo b { font: 600 22px/1 Georgia, serif; }
+body.playing-view .combo.active { border-color: #fff1a8 !important; background: #123960 !important; }
+body.playing-view .lanes {
+  position: relative; inset: auto; width: 100%; height: 100%; min-height: 0;
+  gap: 6px; grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+body.playing-view .lane { min-width: 0; min-height: 0; padding: 8px 4px 7px; overflow: hidden; }
+body.playing-view .lane:focus-visible { outline-offset: -4px; }
+body.playing-view .lane-label {
+  position: absolute; top: 9px; left: 0; width: 100%; opacity: 1; margin: 0;
+  color: #f1dca4; font: 600 clamp(8px, 2.4cqw, 11px)/1 Georgia, serif; letter-spacing: 1px;
+}
+body.playing-view .lane-total {
+  position: absolute; top: 26px; left: 4%; width: 92%; height: 24px;
+  background: none; font: 600 clamp(23px, 7cqw, 30px)/1 Georgia, serif;
+}
+body.playing-view .lane-total em { font-size: 12px; }
+body.playing-view .stack { position: absolute; top: 58px; bottom: 24px; left: 5px; right: 5px; height: auto; margin: 0; }
+body.playing-view .stack .heritage-card {
+  width: var(--lane-card-width, 100%); height: auto; aspect-ratio: 135/190;
+  left: 50%; top: calc(var(--stack-index, 0) * var(--stack-step, 20px));
+  transform: translateX(-50%); border-radius: 4px;
+}
+body.playing-view .lane-empty {
+  display: grid; place-items: center; width: 100%; height: 100%; padding: 0;
+  font: clamp(42px, 16cqw, 80px)/1 Georgia, serif;
+  color: #16467c; text-shadow: 0 1px #3670a7, 0 -2px #020c1c;
+}
+body.playing-view .lane .dots {
+  position: absolute; left: 6%; bottom: 8px; width: 88%; height: 10px;
+  display: block; margin: 0; background: none; font-size: 9px; line-height: 1; letter-spacing: 1px;
+}
+body.playing-view .deal {
+  position: relative; inset: auto; width: 100%; height: 100%; margin: 0;
+  display: flex; justify-content: center; align-items: flex-start; gap: 26px; padding-top: 3px;
+  --deal-card-width: 106px;
+}
+body.playing-view .deal .stock-wrap,
+body.playing-view .deal #current { position: relative; inset: auto; width: var(--deal-card-width); height: auto; }
+body.playing-view .deal .stock {
+  opacity: 1; width: 100%; height: auto; aspect-ratio: 135/190; border: 0;
+  background: url('royal-play.png') 25.96% 76.25% / 470.9% 756.4% no-repeat;
+  border-radius: 5px; color: transparent;
+  box-shadow: -3px 3px #061c38, -4px 4px #c49b4e;
+}
+body.playing-view .deal .stock::before { display: none; }
+body.playing-view .deal .stock-wrap small,
+body.playing-view .current-label {
+  position: static; display: block; width: 130%; margin: 7px -15% 0; padding: 0;
+  background: none; color: #fff3d8; font-size: 12px; font-weight: 600; line-height: 15px; letter-spacing: 0;
+}
+body.playing-view .deal .heritage-card { width: 100%; height: auto; aspect-ratio: 135/190; }
+body.playing-view .deal .arrow { display: block; font-size: 24px; margin-top: 44px; }
+body.playing-view .hint {
+  position: static; inset: auto; width: 100%; height: auto; min-height: 0;
+  opacity: 1; margin: 0; font-size: 12px; line-height: 20px;
+}
+body.playing-view .hint::before, body.playing-view .hint::after { margin: 0 10px; }
+/* Available iframe height, not device model, determines how much decoration fits. */
+@media (max-height: 700px) {
+  body.playing-view header { flex-basis: 48px; height: 48px; padding-block: 3px; }
+  body.playing-view main { grid-template-rows: 23px 58px 4px 29px minmax(0, 1fr) 158px 19px; gap: 5px; padding-bottom: 5px !important; }
+  body.playing-view .stats { padding-block: 6px; }
+  body.playing-view .stats strong { font-size: 27px; margin-top: 2px; }
+  body.playing-view .stats .lives { font-size: 25px; margin-top: 2px; }
+  body.playing-view .timer { height: 4px; }
+  body.playing-view .deal { --deal-card-width: 94px; }
+  body.playing-view .hint { font-size: 11px; line-height: 18px; }
+}
+@media (max-height: 590px) {
+  body.playing-view header { flex-basis: 43px; height: 43px; }
+  body.playing-view header a { font-size: 28px; }
+  body.playing-view header a span { font-size: 19px; }
+  body.playing-view #sound { flex-basis: 36px; width: 36px; height: 36px; font-size: 19px; }
+  body.playing-view main { grid-template-rows: 21px 51px 4px 27px minmax(0, 1fr) 137px 17px; gap: 4px; padding-top: 0 !important; }
+  body.playing-view .topline h1 { font-size: 20px; }
+  body.playing-view .topline .eyebrow { font-size: 9px; }
+  body.playing-view .stats { padding-block: 4px; }
+  body.playing-view .stats strong, body.playing-view .stats .lives { font-size: 24px; }
+  body.playing-view .lane-label { top: 7px; }
+  body.playing-view .lane-total { top: 20px; font-size: 23px; }
+  body.playing-view .stack { top: 46px; bottom: 21px; }
+  body.playing-view .deal { --deal-card-width: 80px; gap: 22px; }
+  body.playing-view .deal .stock-wrap small, body.playing-view .current-label { margin-top: 5px; font-size: 10px; }
+  body.playing-view .deal .arrow { margin-top: 30px; }
+  body.playing-view .hint { font-size: 10px; line-height: 16px; }
+}
+/* Artwork is scaled uniformly. Only unused decoration below controls may crop. */
+body.home-view main, body.result-view main, body.end-view main {
+  width: var(--art-width, 100%); height: 100%; min-height: 0; padding: 0 !important;
+  flex: 0 0 auto; overflow: hidden; background: #03132b;
+}
+body.home-view .hero, body.result-view .result, body.end-view .ending {
+  width: 100%; min-height: 0; height: auto; background-size: 100% auto; background-position: top center;
+}
+body.home-view .hero { aspect-ratio: 902/1743; }
+body.result-view .result { aspect-ratio: 852/1846; }
+body.end-view .ending { aspect-ratio: 863/1823; }
+body.result-view .result dt,
+body.result-view .result #play,
+body.end-view .ending p { font-family: 'Noto Sans JP', system-ui, sans-serif; }
+body.home-view header {
+  position: absolute; top: env(safe-area-inset-top, 0px); left: 50%; transform: translateX(-50%);
+  width: var(--art-width, 100%); height: var(--home-art-height, 100%); min-height: 0;
+  padding: 0; pointer-events: none; z-index: 3;
+}
+body.home-view #sound { pointer-events: auto; }
+body.result-view header, body.end-view header { display: none; }
+#notice { bottom: max(22px, env(safe-area-inset-bottom, 0px)); }
+@media (orientation: landscape) and (max-height: 520px) {
+  /* A portrait board in landscape retains room for its four-card stacks. */
+  body.playing-view header { position: absolute; top: 3px; right: 5px; left: auto; display: flex; width: 36px; height: 36px; padding: 0; z-index: 4; }
+  body.playing-view header a { display: none; }
+  body.playing-view .topline { padding-right: 40px; }
+  body.playing-view main { max-width: 480px !important; grid-template-rows: 22px 44px 3px 24px minmax(0, 1fr) 82px 15px; gap: 3px; }
+  body.playing-view .deal { --deal-card-width: 44px; gap: 22px; padding-top: 0; }
+  body.playing-view .deal .arrow { margin-top: 20px; }
+  body.playing-view .stack { top: 36px; bottom: 17px; }
+  body.playing-view .lane-label { top: 5px; }
+  body.playing-view .lane-total { top: 16px; height: 18px; font-size: 19px; }
+  body.playing-view .lane .dots { bottom: 5px; }
+  body.playing-view .stats strong, body.playing-view .stats .lives { font-size: 22px; margin-top: 0; }
+}
